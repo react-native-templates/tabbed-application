@@ -15,7 +15,7 @@ import {
 
 import FirstTab from './firstTab'
 import SecondTab from './secondTab'
-import GitHubIssues from './github/gitHubIssues'
+/*import GitHubIssues from './github/gitHubIssues'*/
 
 import { firstIcon, secondIcon } from './icons'
 
