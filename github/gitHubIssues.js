@@ -66,7 +66,11 @@ var styles = StyleSheet.create({
   }
 });
 
-class GitHubIssues extends Component {
+const propTypes = {
+  state: React.PropTypes.string.isRequired
+}
+
+export default class GitHubIssues extends Component {
 
   constructor(props) {
     super(props);
@@ -157,7 +161,7 @@ class GitHubIssues extends Component {
 
   _renderErrorView() {
     return (
-      <View style={styles.style}>
+      <View style={[styles.style,{justifyContent: 'center', alignItems: 'center'}]}>
           <Text style={styles.errorText}>Something Went Wrong...</Text>
           <Text style={styles.errorMessageText}>{this.state.errorMessage}</Text>
           <TouchableHighlight
@@ -196,4 +200,4 @@ class GitHubIssues extends Component {
   }
 }
 
-module.exports = GitHubIssues;
+GitHubIssues.propTypes = propTypes;
