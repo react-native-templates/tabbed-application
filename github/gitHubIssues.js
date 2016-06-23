@@ -16,29 +16,29 @@ import api from './api'
 
 var styles = StyleSheet.create({
   style: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1
   },
-  issueBox: {
+  issueListItem: {
     flex: 1,
     flexDirection: 'row',
-    height: 90
+    alignItems: 'center',
+    padding: 20
   },
   issueDetails:
   {
+    flex: 0.8,
     flexDirection: 'column',
+    alignItems: 'flex-start'
   },
   issueTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginLeft: 10
+    flex: 1,
+    fontSize: 15,
+    marginLeft: 15,
   },
   issueAvatarImage: {
     height: 60,
     width: 60,
     borderRadius: 30,
-    marginLeft: 10
   },
   text: {
     fontSize: 40
@@ -80,7 +80,7 @@ class GitHubIssues extends Component {
   }
 
   _getIssues() {
-    return api.get_issues(this.props.state)
+    return api.issues(this.props.state)
       .then((response) => {
         if(response.status == 403) {
           var error = new Error(response.message)
@@ -125,9 +125,8 @@ class GitHubIssues extends Component {
       <View
         key={`${sectionID}-${rowID}`}
         style={{
-          height: adjacentRowHighlighted ? 2 : 1,
-          backgroundColor: adjacentRowHighlighted ? 'red' : 'gray',
-          marginBottom: 5
+          height: adjacentRowHighlighted ? 2 : 0.5,
+          backgroundColor: '#c8c7cc',
         }}
       />
     );
@@ -135,10 +134,10 @@ class GitHubIssues extends Component {
 
   _renderIssueRow(issue) {
     return (
-      <View style={styles.issueBox}>
+      <View style={styles.issueListItem}>
         <Image style={styles.issueAvatarImage} source={{uri: issue.user.avatar_url}} />
         <View style={styles.issueDetails}>
-            <Text style={styles.issueTitle}>{issue.title}</Text>
+            <Text numberOfLines={3} style={styles.issueTitle}>{issue.title}</Text>
         </View>
       </View>
     )
@@ -182,6 +181,7 @@ class GitHubIssues extends Component {
     return (
       <View style={styles.style}>
         <ListView
+          style={{flex:1}}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}

@@ -19,6 +19,22 @@ import GitHubIssues from './github/gitHubIssues'
 
 import { firstIcon, secondIcon } from './icons'
 
+const styles = StyleSheet.create({
+  style: {
+    flex: 1,
+    alignItems: 'stretch',
+  },
+  header: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 15
+  },
+  headerText: {
+    fontSize: 24,
+    color: 'dodgerblue'
+  }
+});
 
 class TabbedApplication extends Component {
   constructor(props) {
@@ -26,12 +42,16 @@ class TabbedApplication extends Component {
 
     this.state = {
       selectedTab: 'first',
+      headerText: 'First'
     }
   }
 
   render() {
     return (
       <View style={styles.style}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>{this.state.headerText}</Text>
+        </View>
         <TabBarIOS selectedTab={this.state.selectedTab}>
           <TabBarIOS.Item
             title="First"
@@ -40,10 +60,11 @@ class TabbedApplication extends Component {
             onPress={() => {
               this.setState({
                 selectedTab: 'first',
+                headerText: 'First'
               });
             }}>
-            {/* <FirstTab /> */}
-            <GitHubIssues state='open' />
+            {/* <GitHubIssues state='open' /> */}
+            <FirstTab />
           </TabBarIOS.Item>
           <TabBarIOS.Item
             title="Second"
@@ -52,10 +73,11 @@ class TabbedApplication extends Component {
             onPress={() => {
               this.setState({
                 selectedTab: 'second',
+                headerText: 'Second'
               });
             }}>
-            {/* <SecondTab /> */}
-            <GitHubIssues state='closed' />
+            {/* <GitHubIssues state='closed' /> */}
+            <SecondTab />
           </TabBarIOS.Item>
         </TabBarIOS>
       </View>
@@ -63,13 +85,5 @@ class TabbedApplication extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-  style: {
-    flex: 1,
-    alignItems: 'stretch',
-    paddingTop: 60
-  },
-});
 
 AppRegistry.registerComponent('TabbedApplication', () => TabbedApplication);
