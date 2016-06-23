@@ -11,7 +11,29 @@ This is a tabbed application starter sample for React Native.
 <br/>
 <br/>
 
+## Quick Start
+
+Make a new React Native application:
+
+```
+$ react-native init MyNewApp
+$ cd MyNewApp
+```
+
+Install and run the template:
+
+```
+$ npm install -g rn-tabbed-template
+$ rn-tabbed-template
+copying template...
+installing dependencies...
+done!
+```
+
+Done!
+
 ## Components
+
 
 The structure is as simple as we could make it.
 
