@@ -1,11 +1,21 @@
-'use strict';
+'use strict'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
-  View,
-} from 'react-native';
+  View
+} from 'react-native'
+
+class FirstTab extends Component {
+  render () {
+    return (
+      <View style={styles.style}>
+        <Text style={styles.text}>First Tab</Text>
+      </View>
+    )
+  }
+}
 
 var styles = StyleSheet.create({
   style: {
@@ -16,22 +26,6 @@ var styles = StyleSheet.create({
   text: {
     fontSize: 40
   }
-});
+})
 
-class FirstTab extends Component {
-
-  constructor(props) {
-    super(props);
-
-  }
-
-  render() {
-    return (
-      <View style={styles.style}>
-        <Text style={styles.text}>First Tab</Text>
-      </View>
-    )
-  }
-}
-
-module.exports = FirstTab;
+module.exports = FirstTab

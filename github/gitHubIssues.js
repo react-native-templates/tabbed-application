@@ -1,89 +1,36 @@
-'use strict';
+'use strict'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
+  ActivityIndicator,
+  Image,
+  ListView,
+  RefreshControl,
   StyleSheet,
   Text,
-  View,
-  ListView,
-  ActivityIndicator,
   TouchableHighlight,
-  RefreshControl,
-  Image
-} from 'react-native';
+  View
+} from 'react-native'
 
 import api from './api'
-
-var styles = StyleSheet.create({
-  style: {
-    flex: 1
-  },
-  issueListItem: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20
-  },
-  issueDetails:
-  {
-    flex: 0.8,
-    flexDirection: 'column',
-    alignItems: 'flex-start'
-  },
-  issueTitle: {
-    flex: 1,
-    fontSize: 15,
-    marginLeft: 15,
-  },
-  issueAvatarImage: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-  },
-  text: {
-    fontSize: 40
-  },
-  errorText: {
-    fontSize: 20,
-    color: 'red'
-  },
-  errorMessageText: {
-    fontSize: 14,
-    color: 'red'
-  },
-  activityIndicator: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  retryButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'orange',
-    borderRadius: 10,
-    height: 50,
-    width: 100,
-    margin: 20
-  }
-});
 
 const propTypes = {
   state: React.PropTypes.string.isRequired
 }
 
 export default class GitHubIssues extends Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props);
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = { error: false, loading: false,refreshing: false, issuesDataSource: ds.cloneWithRows([])}
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+    this.state = { error: false, loading: false,refreshing: false, issuesDataSource: ds.cloneWithRows([]) }
   }
 
-  componentWillMount() {
-    this._tryGetIssues();
+  componentWillMount () {
+    this._tryGetIssues()
   }
 
-  _getIssues() {
+  _getIssues () {
     return api.issues(this.props.state)
       .then((response) => {
         if(response.status == 403) {
@@ -93,38 +40,38 @@ export default class GitHubIssues extends Component {
         }
 
         return response.json()
-      });
+      })
   }
 
-  _tryGetIssues() {
-    this.setState({loading: true});
+  _tryGetIssues () {
+    this.setState({ loading: true })
     this._getIssues()
-    .then((issues) => { this.setState({
-      loading: false,
-      issuesDataSource: this.state.issuesDataSource.cloneWithRows(issues)})
-    })
-    .catch((err) => this.setState({
-      loading: false,
-      error: true,
-      errorMessage: err.message
-    }));
+      .then((issues) => this.setState({
+        loading: false,
+        issuesDataSource: this.state.issuesDataSource.cloneWithRows(issues)
+      }))
+      .catch((err) => this.setState({
+        loading: false,
+        error: true,
+        errorMessage: err.message
+      }))
   }
 
-  _onRefresh() {
-    this.setState({refreshing: true});
+  _onRefresh () {
+    this.setState({refreshing: true})
     this._getIssues()
-    .then((issues) => { this.setState({
-      refreshing: false,
-      issuesDataSource: this.state.issuesDataSource.cloneWithRows(issues)})
-    })
-    .catch((err) => this.setState({
-      refreshing: false,
-      error: true,
-      errorMessage: err.message
-    }));
+      .then((issues) => this.setState({
+        refreshing: false,
+        issuesDataSource: this.state.issuesDataSource.cloneWithRows(issues)
+      }))
+      .catch((err) => this.setState({
+        refreshing: false,
+        error: true,
+        errorMessage: err.message
+      }))
   }
 
-  _renderSeperator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
+  _renderSeperator (sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
     return (
       <View
         key={`${sectionID}-${rowID}`}
@@ -133,10 +80,10 @@ export default class GitHubIssues extends Component {
           backgroundColor: '#c8c7cc',
         }}
       />
-    );
+    )
   }
 
-  _renderIssueRow(issue) {
+  _renderIssueRow (issue) {
     return (
       <View style={styles.issueListItem}>
         <Image style={styles.issueAvatarImage} source={{uri: issue.user.avatar_url}} />
@@ -147,7 +94,7 @@ export default class GitHubIssues extends Component {
     )
   }
 
-  _renderLoadingView() {
+  _renderLoadingView () {
     return (
       <View style={styles.style}>
           <ActivityIndicator
@@ -156,12 +103,12 @@ export default class GitHubIssues extends Component {
               size="large"
           />
       </View>
-    );
+    )
   }
 
-  _renderErrorView() {
+  _renderErrorView () {
     return (
-      <View style={[styles.style,{justifyContent: 'center', alignItems: 'center'}]}>
+      <View style={[ styles.style, { justifyContent: 'center', alignItems: 'center' } ]}>
           <Text style={styles.errorText}>Something Went Wrong...</Text>
           <Text style={styles.errorMessageText}>{this.state.errorMessage}</Text>
           <TouchableHighlight
@@ -170,22 +117,22 @@ export default class GitHubIssues extends Component {
               <Text style={{fontSize: 16, color: 'white'}}>Retry</Text>
           </TouchableHighlight>
       </View>
-    );
+    )
   }
 
-  render() {
-    if(this.state.loading) {
-      return this._renderLoadingView();
+  render () {
+    if (this.state.loading) {
+      return this._renderLoadingView()
     }
 
     if(this.state.error) {
-      return this._renderErrorView();
+      return this._renderErrorView()
     }
 
     return (
       <View style={styles.style}>
         <ListView
-          style={{flex:1}}
+          style={{ flex: 1 }}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -200,4 +147,55 @@ export default class GitHubIssues extends Component {
   }
 }
 
-GitHubIssues.propTypes = propTypes;
+var styles = StyleSheet.create({
+  style: {
+    flex: 1
+  },
+  issueListItem: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    padding: 20
+  },
+  issueDetails: {
+    alignItems: 'flex-start',
+    flex: 0.8,
+    flexDirection: 'column'
+  },
+  issueTitle: {
+    flex: 1,
+    fontSize: 15,
+    marginLeft: 15,
+  },
+  issueAvatarImage: {
+    borderRadius: 30,
+    height: 60,
+    width: 60
+  },
+  text: {
+    fontSize: 40
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 20
+  },
+  errorMessageText: {
+    color: 'red',
+    fontSize: 14
+  },
+  activityIndicator: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  retryButton: {
+    alignItems: 'center',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center'
+    margin: 20,
+    width: 100
+  }
+})
+
+GitHubIssues.propTypes = propTypes
