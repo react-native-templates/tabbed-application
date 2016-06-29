@@ -1,6 +1,6 @@
 {
   "name": "rn-tabbed-template",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "bin": {
     "rn-tabbed-template": "./scripts/install.js"
   },
@@ -12,6 +12,7 @@
     "react-native": "0.28.0"
   },
   "dependencies": {
-    "fs-extra": "^0.30.0"
+    "fs-extra": "^0.30.0",
+    "jscodeshift":"^0.3.25"
   }
 }

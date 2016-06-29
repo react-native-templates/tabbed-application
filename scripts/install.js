@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-'use strict'
+'use strict';
 const fs = require('fs-extra')
 const path = require('path')
+const spawn = require('child_process').spawnSync
+const codeshift = require('jscodeshift/dist/Runner');
 
 const tmplDir = path.join(__dirname, '../')
 const wd = process.cwd()
 const files = fs.readdirSync(tmplDir)
-const dirname = wd.split('/').pop()
+const pkg = require(path.join(wd,'package.json'))
 
-console.log('copying template...')
-files.filter((file) => file.endsWith('.js'))
-.forEach((file) => {
+console.log(`Building template for ${pkg.name}...`)
+files.filter(file=>file.endsWith('.js'))
+.forEach(file=>{
   fs.copySync(
     path.join(tmplDir, file),
     path.join(wd, file)
@@ -22,15 +24,11 @@ fs.copySync(
   path.join(wd, 'github')
 )
 
-fs.readFile(`${wd}/index.ios.js`, 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err)
-  }
-  var result = data.replace(/TabbedApplication/g, dirname)
-
-  fs.writeFile(`${wd}/index.ios.js`, result, 'utf8', function (err) {
-    if (err) return console.log(err)
+console.log("codeshifting..")
+codeshift
+  .run(path.join(tmplDir, 'scripts/transform.js') , ['app.js'], { appname: pkg.name })
+  .then(function() {
+    console.log("done!")
+  }, function(err) {
+    console.log("error: codeshift failed:", err.message)
   })
-})
-
-console.log('done!')
